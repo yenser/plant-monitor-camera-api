@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from camera import Camera
 from database import Database
 from images import toByteArray
@@ -12,8 +13,17 @@ db.connect()
 
 camera = Camera()
 
-
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get('/capture/{name}')
 def capturePicture(name):
@@ -49,3 +59,8 @@ def dbVersion():
   db_version = db.getVersion()
 
   return db_version
+
+@app.get('/dbsize')
+def dbSize():
+  size = db.getDatabaseSize()
+  return {"size": size}

@@ -52,3 +52,16 @@ class Database:
       return None
 
     return f[0]
+
+  def getDatabaseSize(self):
+    conn = self.pool.getconn()
+    cur = conn.cursor()
+
+    cur.execute('SELECT pg_size_pretty( pg_database_size(%s) );', ('plantmonitor',))
+    f = cur.fetchone()
+    cur.close()
+
+    if (f == None):
+      return None
+
+    return f[0]
