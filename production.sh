@@ -1,2 +1,1 @@
-./installPackages.sh ;
 uvicorn main:app --host 0.0.0.0 > /dev/null &

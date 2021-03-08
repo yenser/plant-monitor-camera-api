@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.responses import StreamResponse
+from starlette.responses import StreamingResponse
 from io import BytesIO
 from time import sleep
 import picamera
@@ -39,4 +39,4 @@ def captureImage():
         camera.capture(image_stream, 'jpeg')
         image_stream.seek(0) # move to start position
 
-        return StreamResponse(image_stream, media_type="image/jpeg", )
+        return StreamingResponse(image_stream, media_type="image/jpeg", )
