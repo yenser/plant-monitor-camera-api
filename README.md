@@ -1,1 +1,1 @@
-# plant-monitor-daemon
+# plant-monitor-camera-api
