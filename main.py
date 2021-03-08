@@ -8,6 +8,7 @@ app = FastAPI()
 
 @app.get('/capture')
 def captureImage():
+  print("Taking picture")
   with picamera.PiCamera() as camera:
     image_stream = BytesIO()
     camera.start_preview()

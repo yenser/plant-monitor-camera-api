@@ -1,0 +1,1 @@
+xargs sudo pip3 install <packages.txt;
