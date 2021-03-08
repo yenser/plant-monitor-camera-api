@@ -1,0 +1,1 @@
+pgrep uvicorn | xargs kill -9
