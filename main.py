@@ -4,6 +4,7 @@ from io import BytesIO
 from time import sleep
 import picamera
 import requests
+import subprocess
 
 app = FastAPI()
 
@@ -17,17 +18,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get('/healthcheck')
+def healthcheck():
+    temp = subprocess.call('cat /sys/class/thermal/thermal_zone0/temp')
+    return {'status': 'OK', 'temperature': temp/1000}
+
+
 @app.get('/capture')
 def captureImage():
-  print("Taking picture")
-  with picamera.PiCamera() as camera:
-    image_stream = BytesIO()
-    camera.start_preview()
-    # Camera warm-up time
-    sleep(1)
-    camera.capture(image_stream, 'jpeg')
+    print("Taking picture")
+    with picamera.PiCamera() as camera:
+        image_stream = BytesIO()
+        camera.start_preview()
+        # Camera warm-up time
+        sleep(1)
+        camera.capture(image_stream, 'jpeg')
 
-    r = requests.post('http://192.168.50.156:8080/images/name.jpg',
-      data=image_stream.getbuffer(),
-      headers={'Content-Type': 'image/jpeg', 'Content-Length': str(image_stream.getbuffer().nbytes)})
-    return r.json()
+        r = requests.post('http://192.168.50.156:8080/images/name.jpg',
+                          data=image_stream.getbuffer(),
+                          headers={'Content-Type': 'image/jpeg', 'Content-Length': str(image_stream.getbuffer().nbytes)})
+        return r.json()
