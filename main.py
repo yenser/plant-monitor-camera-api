@@ -37,6 +37,8 @@ def captureImage():
         # Camera warm-up time
         sleep(1)
         camera.capture(image_stream, 'jpeg')
+
+        buff_size = str(image_stream.getbuffer().nbytes)
         image_stream.seek(0) # move to start position
 
-        return StreamingResponse(image_stream, media_type="image/jpeg", )
+        return StreamingResponse(image_stream, media_type="image/jpeg", headers={'Content-Length': buff_size})
